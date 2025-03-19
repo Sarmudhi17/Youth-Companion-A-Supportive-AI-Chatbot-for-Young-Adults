@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+            background-color: white;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0f1b42;
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .switch-form a {
+            color: #121f4d;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Chat Interface */
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            height: 600px;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .user-info h2 {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        
+        .user-info p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #f5f7fb;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        
+        .bot-message {
+            background-color: white;
+            border-left: 4px solid #18244d;
+            align-self: flex-start;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            align-self: flex-end;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .chat-input {
+            padding: 15px;
+            display: flex;
+            border-top: 1px solid #eee;
+            background-color: white;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 15px;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #6e8efb;
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, #071646, #a777e3);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Onboarding Section */
+        .onboarding {
+            display: none;
+            padding: 30px;
+        }
+        
+        .onboarding h2 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+        }
+        
+        .question-container p {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .option {
+            background-color: #f0f2f5;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover, .option.selected {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div id="login-section">
+            <div class="header">
+                <h1>Youth Companion</h1>
+                <p>Your supportive friend for life's journey</p>
+            </div>
+            
+            <div class="form-container" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password">
+                </div>
+                <button id="login-btn">Log In</button>
+                <div class="switch-form">
+                    Don't have an account? <a id="show-register">Register</a>
+                </div>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="form-container" id="register-form" style="display: none;">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="register-age">Age</label>
+                    <input type="number" id="register-age" placeholder="Enter your age" min="13" max="29">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" placeholder="Create a password">
+                </div>
+                <button id="register-btn">Register</button>
+                <div class="switch-form">
+                    Already have an account? <a id="show-login">Log In</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Onboarding Section -->
+        <div id="onboarding-section" class="onboarding">
+            <h2>Let's get to know you better</h2>
+            
+            <div class="question-container">
+                <p>Which areas are you most interested in getting help with?</p>
+                <div class="options">
+                    <div class="option" data-value="career">Career</div>
+                    <div class="option" data-value="education">Education</div>
+                    <div class="option" data-value="relationships">Relationships</div>
+                    <div class="option" data-value="friendships">Friendships</div>
+                    <div class="option" data-value="mental-health">Mental Health</div>
+                    <div class="option" data-value="Friendly conversations">Companion</div>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <p>What's your current educational status?</p>
+                <div class="options">
+                    <div class="option" data-value="high-school">High School</div>
+                    <div class="option" data-value="college">College/University</div>
+                    <div class="option" data-value="graduated">Graduated</div>
+                    <div class="option" data-value="working">Working</div>
+                    <div class="option" data-value="gap-year">Taking a Gap Year</div>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <p>How would you describe your personality?</p>
+                <div class="options">
+                    <div class="option" data-value="introvert">Introverted</div>
+                    <div class="option" data-value="extrovert">Extroverted</div>
+                    <div class="option" data-value="ambivert">Somewhere in between</div>
+                </div>
+            </div>
+            
+            <button id="complete-onboarding">Continue to Chat</button>
+        </div>
+        
+        <!-- Chat Interface -->
+        <div id="chat-section" class="chat-container">
+            <div class="chat-header">
+                <img src="bot.png" alt="Bot Avatar">
+                <div class="user-info">
+                    <h2>Rise Together</h2>
+                    <p>Online</p>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Type your message...">
+                <div class="send-btn" id="send-message">
+                    ➤
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mock user data storage (in real app, this would be a database)
+        let users = [];
+        let currentUser = null;
+        let userPreferences = {};
+        
+        // DOM elements
+        const loginSection = document.getElementById('login-section');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const onboardingSection = document.getElementById('onboarding-section');
+        const chatSection = document.getElementById('chat-section');
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        
+        // Switch between login and register forms
+        document.getElementById('show-register').addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        });
+        
+        document.getElementById('show-login').addEventListener('click', () => {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+        
+        // Register new user
+        document.getElementById('register-btn').addEventListener('click', () => {
+            const name = document.getElementById('register-name').value;
+            const age = document.getElementById('register-age').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            if (!name || !age || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (age < 13) {
+                alert('You must be at least 13 years old to use this app');
+                return;
+            }
+            
+            const newUser = { name, age, email, password };
+            users.push(newUser);
+            currentUser = newUser;
+            
+            loginSection.style.display = 'none';
+            onboardingSection.style.display = 'block';
+        });
+        
+        // Login existing user
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('Please enter your email and password');
+                return;
+            }
+            
+            // For demo purposes, let's create a mock user if none exists
+            if (users.length === 0) {
+                const mockUser = { name: 'Demo User', age: 19, email: email, password: password };
+                users.push(mockUser);
+                currentUser = mockUser;
+                userPreferences = {
+                    interests: ['career', 'education'],
+                    education: 'college',
+                    personality: 'ambivert'
+                };
+                
+                loginSection.style.display = 'none';
+                chatSection.style.display = 'flex';
+                
+                // Add welcome message
+                addBotMessage("Hi Demo User! Welcome back to Youth Companion. How can I help you today? Feel free to ask me about your studies, career plans, or any friendship or relationship advice you might need.");
+                return;
+            }
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                loginSection.style.display = 'none';
+                
+                // Check if user completed onboarding
+                if (userPreferences.interests) {
+                    chatSection.style.display = 'flex';
+                    addBotMessage(`Welcome back, ${user.name}! How can I help you today?`);
+                } else {
+                    onboardingSection.style.display = 'block';
+                }
+            } else {
+                alert('Invalid email or password');
+            }
+        });
+        
+        // Handle onboarding options selection
+        const options = document.querySelectorAll('.option');
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                // Toggle selection within the same question group
+                const siblings = option.parentElement.querySelectorAll('.option');
+                siblings.forEach(sib => {
+                    if (sib !== option) sib.classList.remove('selected');
+                });
+                option.classList.toggle('selected');
+            });
+        });
+        
+        // Complete onboarding and go to chat
+        document.getElementById('complete-onboarding').addEventListener('click', () => {
+            // Collect preferences
+            const interests = [];
+            document.querySelectorAll('.question-container:nth-child(1) .option.selected').forEach(option => {
+                interests.push(option.getAttribute('data-value'));
+            });
+            
+            let education = '';
+            document.querySelectorAll('.question-container:nth-child(2) .option.selected').forEach(option => {
+                education = option.getAttribute('data-value');
+            });
+            
+            let personality = '';
+            document.querySelectorAll('.question-container:nth-child(3) .option.selected').forEach(option => {
+                personality = option.getAttribute('data-value');
+            });
+            
+            userPreferences = { interests, education, personality };
+            
+            onboardingSection.style.display = 'none';
+            chatSection.style.display = 'flex';
+            
+            // Initial welcome message
+            const welcomeMessage = `Hi ${currentUser.name}! I'm your Youth Companion, here to support you on your journey. I see you're interested in ${interests.join(', ')}. What would you like to talk about today?`;
+            addBotMessage(welcomeMessage);
+        });
+        
+        // Send message functionality
+        document.getElementById('send-message').addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            addUserMessage(message);
+            messageInput.value = '';
+            
+            // Process user message and generate response
+            setTimeout(() => {
+                const botResponse = generateResponse(message);
+                addBotMessage(botResponse);
+                
+                // Auto scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        }
+        
+        function addUserMessage(text) {
+            const time = getCurrentTime();
+            const messageHtml = `
+                <div class="message user-message">
+                    ${text}
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            chatMessages.innerHTML += messageHtml;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addBotMessage(text) {
+            const time = getCurrentTime();
+            const messageHtml = `
+                <div class="message bot-message">
+                    ${text}
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            chatMessages.innerHTML += messageHtml;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        function generateResponse(message) {
+            // Simple rule-based response system
+            message = message.toLowerCase();
+            
+            // Career advice
+            if (message.includes('career') || message.includes('job') || message.includes('profession') || message.includes('work')) {
+                if (userPreferences.education === 'high-school') {
+                    return "It's great that you're thinking about your career while still in high school! Consider exploring different fields through volunteer work, internships, or job shadowing. What subjects are you most interested in at school? Those might give clues about potential career paths.";
+                } else if (userPreferences.education === 'college') {
+                    return "College is a perfect time to explore career options! Have you considered visiting your university's career center? They can help with internships, resume building, and connecting with alumni in fields you're interested in. What's your major, and are you enjoying it?";
+                } else {
+                    return "When considering career options, think about what energizes you, what you're naturally good at, and what the job market demands. Would you like some tips on job searching, interview preparation, or figuring out your career path?";
+                }
+            }
+            
+            // Education advice
+            if (message.includes('study') || message.includes('school') || message.includes('college') || message.includes('university') || message.includes('class') || message.includes('exam')) {
+                if (message.includes('stress') || message.includes('overwhelm')) {
+                    return "Academic pressure can be intense. Try breaking down your work into smaller tasks, use the Pomodoro technique (25 minutes work, 5 minutes break), and don't forget self-care! What subject is causing you the most stress right now?";
+                } else {
+                    return "For effective studying, find your learning style (visual, auditory, kinesthetic), create a dedicated study space, and use active recall techniques. Have you tried making flashcards or teaching concepts to someone else? These are proven to boost retention!";
+                }
+            }
+            
+            // Friendship advice
+            if (message.includes('friend') || message.includes('friendship')) {
+                if (message.includes('make') || message.includes('new')) {
+                    return "Making new friends takes courage! Try joining clubs or activities aligned with your interests, volunteer, or take classes. Remember to be yourself and show genuine interest in others. What are some of your hobbies where you might meet like-minded people?";
+                } else if (message.includes('fight') || message.includes('argument') || message.includes('conflict')) {
+                    return "Friendship conflicts are normal. Try to approach the situation calmly, use 'I' statements to express how you feel without blaming, and really listen to your friend's perspective. Would you like to talk more about what happened?";
+                } else {
+                    return "Healthy friendships involve mutual respect, trust, and good communication. It's also normal for friendships to evolve over time. What aspect of friendship are you currently navigating?";
+                }
+            }
+            
+            // Relationship advice
+            if (message.includes('relationship') || message.includes('dating') || message.includes('boyfriend') || message.includes('girlfriend') || message.includes('partner') || message.includes('crush')) {
+                if (message.includes('breakup') || message.includes('broke up')) {
+                    return "Breakups can be really painful. Give yourself permission to grieve the relationship, lean on friends and family for support, and focus on self-care. Remember that healing isn't linear, and it's okay to have good and bad days. How are you taking care of yourself right now?";
+                } else if (message.includes('ask') || message.includes('crush')) {
+                    return "Having feelings for someone can be both exciting and nerve-wracking! Consider starting with casual conversations to build connection. Remember that confidence (not arrogance) is attractive, and being genuine is always better than trying to be someone you're not. What do you like about this person?";
+                } else {
+                    return "Healthy relationships involve open communication, mutual respect, trust, and maintaining your individual identities. What specific aspect of relationships would you like to discuss?";
+                }
+            }
+            
+            // Mental health
+            if (message.includes('stress') || message.includes('anxiety') || message.includes('depress') || message.includes('overwhelm') || message.includes('mental health')) {
+                return "I'm sorry you're going through this. Your feelings are valid, and you're not alone. Consider talking to a trusted adult, school counselor, or mental health professional. In the meantime, basics like adequate sleep, physical activity, and mindfulness practices can help. Would you like some specific coping strategies?";
+            }
+            
+            // General greeting
+            if (message.includes('hi') || message.includes('hello') || message.includes('hey')) {
+                return `Hi there! I'm your Youth Companion. How can I help you today with education, career, friendships, or relationships?`;
+            }
+            
+            // Thank you response
+            if (message.includes('thank you') || message.includes('thanks')) {
+                return "You're very welcome! I'm here to support you whenever you need it. Is there anything else you'd like to talk about?";
+            }
+            
+            // Default response
+            return "I'm here to help with education, career planning, friendships and relationships. What's on your mind today? Feel free to share more details so I can give you more personalized guidance.";
+        }
+    </script>
+</body>
+</html>
